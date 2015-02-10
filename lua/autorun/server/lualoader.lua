@@ -2,14 +2,11 @@
 // created by request
 // op
 
-local ll = {}
+ll = ll or {}
+
 print("Lua Loader loaded.")
 print("Created by Zero The Fallen")
-print(debug.getinfo(1).short_src)
-
-if !ll.loaded then
- 
-ll.loaded = true
+print("Located @ : " .. debug.getinfo(1).short_src)
 print()
 
 // use the root directory. eg if you have an addon like
@@ -18,22 +15,22 @@ print()
 
 ll.directories = {"lua/autorun/server/"}
 ll.filesLoaded = {}
-
+table.insert(ll.filesLoaded, debug.getinfo(1).short_src) // so it doesnt load itself twice ... lol
 
 ll.loadServer = function(lua)
 	if !lua then return end
 	if table.HasValue(ll.filesLoaded, lua) then return end
-	RunStringEx(file.Read(lua, "GAME"), lua)
-	print("How it would look: RunStringEx(file.Read(" .. lua .. ", GAME)," .. lua .. "\n")
 	table.insert(ll.filesLoaded, lua)
+	RunStringEx(file.Read(lua, "GAME"), lua)
+	//print("How it would look: RunStringEx(file.Read(" .. lua .. ", GAME)," .. lua .. "\n")
 end
 
 ll.loadClient = function(lua)
 	if !lua then return end
 	if table.HasValue(ll.filesLoaded, lua) then return end
-	AddCSLuaFile(lua)
-	print("How it would look: AddCSLuaFile(" .. lua .. ")".. "\n")
 	table.insert(ll.filesLoaded, lua)
+	AddCSLuaFile(lua)
+	//print("How it would look: AddCSLuaFile(" .. lua .. ")".. "\n")
 end
 
 ll.loadShared = function(lua)
@@ -92,6 +89,11 @@ ll.loadFiles = function()
 	end
 end
 
-ll.loadFiles()
-
+if hasloaded then
+	return
+else
+	hasloaded = true
+	ll.loadFiles()
+	print("Files loaded:")
+	PrintTable(ll.filesLoaded)
 end
