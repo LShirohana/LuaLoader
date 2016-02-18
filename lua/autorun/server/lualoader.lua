@@ -2,6 +2,8 @@
 // created by request
 // op
 
+// Edit: 2/16/2016. This is a very bad written code. It works, but it doesnt follow any algorithm and can be made 10x better. 
+
 ll = ll or {}
 
 print("Lua Loader loaded.")
